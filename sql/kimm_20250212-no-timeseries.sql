@@ -28,6 +28,8 @@
 
 ------------------------------------------------------------------------------->
 
+-- SELECT ALL KIMM TABLES FROM THE SYSTEM CATALOG:
+-- SELECT OWNER, TABLE_NAME FROM DBA_TABLES WHERE OWNER='KIMM' ORDER BY TABLE_NAME ASC;
 
 -- Begin Drop Tables --------------------------------->
 
