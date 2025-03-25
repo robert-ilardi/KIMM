@@ -33,7 +33,7 @@
 -- SELECT COUNT(*) FROM DBA_TABLES WHERE OWNER='KIMM';
 
 
--- Begin Drop Tables --------------------------------->
+-- Begin Drop Tables ---------------------------------------------------------->
 
 DROP TABLE IF EXISTS KIMM_ENTITY_ENTITY_REL;
 DROP TABLE IF EXISTS KIMM_DATA_RESOURCE_LOCATION_REL;
@@ -127,7 +127,8 @@ DROP TABLE IF EXISTS KIMM_ENTITY_MASTER_HIST;
 DROP TABLE IF EXISTS KIMM_ENTITY_MASTER;
 
 
--- Drop Ref Tables ------------------------------------------>
+-- Drop Ref Tables ------------------------------------------------------------>
+
 
 DROP TABLE IF EXISTS KIMM_COMPOSITION_TYPE_REF;
 
@@ -216,16 +217,43 @@ DROP TABLE IF EXISTS KIMM_METADATA_STATUS_CODE_REF;
 DROP TABLE IF EXISTS KIMM_REF_STATUS_CODE_REF;
 
 
--- End Drop Tables --------------------------->
+-- End Drop Tables ------------------------------------------------------------>
 
 
----------------------------------------------------------------------------->
+------------------------------------------------------------------------------->
 
 
--- Begin KIMM Complete Model Tables ------------------->
+-- Begin KIMM Sqeuences ------------------------------------------------------->
 
 
--- Begin System Reference Code Tables --------------------------------------->
+-- Begin Entity Master Id Sequence ------------------------>
+
+DROP SEQUENCE IF EXISTS KIMM_ENTITY_MASTER_ID_SQN;
+
+CREATE SEQUENCE KIMM_ENTITY_MASTER_ID_SQN
+	START WITH 100000
+	INCREMENT BY 1
+	MAXVALUE 9999999999999999999
+	MINVALUE 100000
+	NOCYCLE
+	NOCACHE
+	NOORDER;
+
+-- SELECT KIMM.KIMM_ENTITY_MASTER_ID_SQN.NEXTVAL FROM DUAL;
+-- SELECT KIMM.KIMM_ENTITY_MASTER_ID_SQN.CURRVAL FROM DUAL;
+
+-- End Entity Master Id Sequence -------------------------->
+
+-- End KIMM Sqeuences --------------------------------------------------------->
+
+
+------------------------------------------------------------------------------->
+
+
+-- Begin KIMM Complete Model Tables ------------------------------------------->
+
+
+-- Begin System Reference Code Tables ----------------------------------------->
 
 
 -- Reference Tables Status Code Reference Table
@@ -1076,13 +1104,13 @@ CREATE INDEX IDX_EPNTDF_EPNTNM ON KIMM_ENTRY_POINT_DEF(ENTRY_POINT_NAME);
 CREATE TABLE KIMM_ENTRY_POINT_REL(ENTRY_POINT_ENTITY_MASTER_ID NUMBER(19,0) NOT NULL, ENTRY_POINT_RECORD_UID NUMBER(19,0) NOT NULL, ENTRY_POINT_MEMBER_ENTITY_MASTER_ID NUMBER(19,0) NOT NULL, ENTRY_POINT_MEMBER_RECORD_UID NUMBER(19,0) NOT NULL, ENTRY_POINT_MEMBER_ENTITY_INDEX INT NULL, METADATA_STATUS_CODE VARCHAR(32) NOT NULL, CREATION_USR VARCHAR(32) NOT NULL, CREATION_APP VARCHAR(64) NOT NULL, CREATION_TS TIMESTAMP WITH TIME ZONE NOT NULL, LST_MOD_USR VARCHAR(32) NOT NULL, LST_MOD_APP VARCHAR(64) NOT NULL, LST_MOD_CHG_CD CHAR(1) NOT NULL, LST_MOD_TS TIMESTAMP WITH TIME ZONE NOT NULL, CONSTRAINT PK_EPNTREL_EMID_SSID PRIMARY KEY(ENTRY_POINT_ENTITY_MASTER_ID, ENTRY_POINT_RECORD_UID, ENTRY_POINT_MEMBER_ENTITY_MASTER_ID, ENTRY_POINT_MEMBER_RECORD_UID), CONSTRAINT FK_EPNTREL_GEMID_GSSID FOREIGN KEY(ENTRY_POINT_ENTITY_MASTER_ID, ENTRY_POINT_RECORD_UID) REFERENCES KIMM_ENTRY_POINT_DEF(ENTRY_POINT_ENTITY_MASTER_ID, ENTRY_POINT_RECORD_UID), CONSTRAINT FK_EPNTREL_MEMID_MSSID FOREIGN KEY(ENTRY_POINT_MEMBER_ENTITY_MASTER_ID, ENTRY_POINT_MEMBER_RECORD_UID) REFERENCES KIMM_ENTITY_MASTER(ENTITY_MASTER_ID, RECORD_UID), CONSTRAINT FK_EPNTREL_MDSCD FOREIGN KEY(METADATA_STATUS_CODE) REFERENCES KIMM_METADATA_STATUS_CODE_REF(METADATA_STATUS_CODE), CONSTRAINT CK_EPNTREL_LMCC CHECK(LST_MOD_CHG_CD IN ('I', 'U', 'D')));
 
 
--- End Catalog Relationship, Grouping, Ordering, and Entry Point Tables ----------------------------->
+-- End Catalog Relationship, Grouping, Ordering, and Entry Point Tables ------->
 
 
------------------------------------------------------------>
+------------------------------------------------------------------------------->
 
 
--- Begin Entity Metadata "Dimensions" Tables -------------->
+-- Begin Entity Metadata "Dimensions" Tables ---------------------------------->
 
 
 -- Information Classification Table
@@ -1350,11 +1378,12 @@ CREATE TABLE KIMM_COMPOSITION_COMPONENTS(COMPOSITION_ENTITY_MASTER_ID NUMBER(19,
 
 
 
--- End Entity Metadata "Dimensions" Tables ---------------->
+-- End Entity Metadata "Dimensions" Tables ------------------------------------>
 
 
------------------------------------------------------------>
+------------------------------------------------------------------------------->
 
 
--- END Core Catalog Metadata (Meta Model) Tables -------------------------->
+-- END Core Catalog Metadata (Meta Model) Tables ------------------------------>
+
 
